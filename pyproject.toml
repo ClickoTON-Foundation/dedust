@@ -1,0 +1,21 @@
+[project]
+name = "dedust"
+description = "DeDust - DeDust v2 API for Python."
+readme = "README.md"
+version = "0.0.1"
+authors = [
+    {name = "Vlad100"}
+]
+dependencies = [
+    "aiohttp",
+    "flask"
+]
+
+[project.optional-dependencies]
+dev = [
+    "tox"
+]
+
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = ["flit_core >=3.2,<4"]
