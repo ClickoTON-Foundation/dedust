@@ -59,7 +59,7 @@ This project is licensed under the Apache License 2.0 - see the LICENSE.md file 
 
 ## Donate
 
-If you liked the library, I will be glad to donate.
+If you like the bot, I will be glad to accept donations.
 
 * TON: EQCgphx8rTI0PukwmgpVqiPgqguTujhQscg2h7jgc4U0t347
 
