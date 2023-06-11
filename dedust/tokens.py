@@ -1,4 +1,4 @@
-from .functions import get_reserves, get_liquidity, get_price, get_volume
+from .functions import get_reserves, get_liquidity, get_price, get_volume, get_lp_token_address
 from .api import API
 
 class Token():
@@ -27,3 +27,8 @@ class Token():
         await self.update()
         
         return await get_volume(self.pool, self.index)
+    
+    async def get_lp_token_address(self):
+        await self.update()
+        
+        return await get_lp_token_address(self.pool)

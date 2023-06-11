@@ -46,3 +46,6 @@ async def get_volume(pool: dict, jetton_index: int) -> tuple[int, float]:
     volume = tuple(map(int, raw_volume))
     
     return volume[ton_index] / 10 ** 9, volume[jetton_index] / 10 ** 9
+
+async def get_lp_token_address(pool: dict):
+    return pool['address']

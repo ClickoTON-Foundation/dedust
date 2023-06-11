@@ -11,6 +11,7 @@ async def main():
     print(f'$SCALE price: {await token.get_price()} TON')
     print(f'Volume: {(await token.get_volume())[0]} TON')
     print(f'Liquidity: {(await token.get_liquidity())[0]} TON')
+    print(f'$LP token: {await token.get_lp_token_address()}')
 
 
 if __name__ == '__main__':
