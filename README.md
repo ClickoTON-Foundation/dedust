@@ -51,10 +51,14 @@ if __name__ == '__main__':
 
 ## Version History
 
-* 0.0.1
-    * Initial Beta
+* 0.0.4
+    * Dependecies fix
+* 0.0.3
+    * Examples fix
 * 0.0.2
     * LP token address getting
+* 0.0.1
+    * Initial Beta
 
 ## License
 
