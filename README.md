@@ -68,7 +68,7 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 
 ## Donate
 
-If you like the bot, I will be glad to accept donations.
+If you like the library, I will be glad to accept donations.
 
 * TON: EQCgphx8rTI0PukwmgpVqiPgqguTujhQscg2h7jgc4U0t347
 
