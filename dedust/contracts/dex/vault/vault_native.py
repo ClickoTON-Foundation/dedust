@@ -16,7 +16,7 @@ class VaultNative:
     
     @staticmethod
     def create_from_address(address: Union[Address, str]) -> Type["VaultJetton"]:
-        return VaultJetton(address)
+        return VaultNative(address)
     
     @staticmethod
     def create_deposit_liquidity_payload(

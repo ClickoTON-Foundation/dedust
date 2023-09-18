@@ -1,11 +1,13 @@
 from tonsdk.utils import Address
 from tonsdk.boc import begin_cell, Cell
+from tonsdk.contract.token.ft import JettonWallet
 from typing import Union, Type
-from ..api import Provider
+from ...api import Provider
 
 
 class JettonWallet:
     def __init__(
+        self,
         address: Union[Address, str]
     ):
         self.address = Address(address) if type(address) == str else address
@@ -15,6 +17,7 @@ class JettonWallet:
         return JettonWallet(address)
 
     def create_transfer_payload(
+        self,
         destination: Address,
         amount: int,
         query_id: int = 0,

@@ -8,7 +8,7 @@ class Asset:
     def __init__(
         self,
         _type: AssetType,
-        address: Union[Address, str]
+        address: Union[Address, str, None] = None
     ):
         self._type = _type
         self.address = Address(address) if type(address) == str else address
@@ -50,7 +50,7 @@ class Asset:
     
     def to_slice(self) -> Slice:
         if self._type == AssetType.NATIVE:
-            return begin_cell().store_uint(0, 4).end_cell().begin_parse()
+            return begin_cell().store_uint(0, 4).end_cell()
 
         elif self._type == AssetType.JETTON:
             return begin_cell().store_uint(AssetType.JETTON.value, 4).store_int(self.address.wc, 8).store_bytes(self.address.hash_part).end_cell()

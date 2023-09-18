@@ -43,14 +43,23 @@ class Vault:
         return Asset.from_slice(stack[0]["value"].begin_parse())
 
     @staticmethod
-    def pack_swap_params(swapParams: SwapParams) -> Cell:
-        return begin_cell()\
-            .store_uint(swapParams.deadline, 32)\
-            .store_address(swapParams.recipient_address)\
-            .store_address(swapParams.referral_address)\
-            .store_maybe_ref(swapParams.fulfill_payload)\
-            .store_maybe_ref(swapParams.reject_payload)\
-            .end_cell()
+    def pack_swap_params(swap_params: Union[SwapParams, None]) -> Cell:
+        if swap_params is None:
+            return begin_cell()\
+                .store_uint(0, 32)\
+                .store_address(None)\
+                .store_address(None)\
+                .store_maybe_ref(None)\
+                .store_maybe_ref(None)\
+                .end_cell()
+        else:
+            return begin_cell()\
+                .store_uint(swap_params.deadline, 32)\
+                .store_address(swap_params.recipient_address)\
+                .store_address(swap_params.referral_address)\
+                .store_maybe_ref(swap_params.fulfill_payload)\
+                .store_maybe_ref(swap_params.reject_payload)\
+                .end_cell()
 
     @staticmethod
     def pack_swap_step(pool_address: Address, limit: int = 0, _next: SwapStep = None) -> Cell:
@@ -58,5 +67,5 @@ class Vault:
             .store_address(pool_address)\
             .store_uint(0, 1)\
             .store_coins(limit)\
-            .store_maybe_ref(_next if Vault.pack_swap_step(pool_address, limit, _next) else None)\
+            .store_maybe_ref(None)\
             .end_cell()

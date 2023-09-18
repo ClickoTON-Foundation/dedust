@@ -7,18 +7,15 @@ from ..liquidity_deposit import LiquidityDeposit
 from ..pool import Pool, PoolType
 from ...jettons import JettonRoot
 from ....api import Provider
+from ....constants import MAINNET_FACTORY_ADDR
 
 
 class Factory:
-    def __init__(
-        address: Union[Address, str]
-    ):
-        self.address = Address(address) if type(address) == str else address
-    
     @staticmethod
-    def create_from_address(address: Union[address, str]) -> Type["Factory"]:
+    def create_from_address(address: Union[Address, str]) -> Type["Factory"]:
         return Factory(address)
     
+    @staticmethod
     def create_create_vault_payload(
         asset: Asset,
         query_id: int = 0
@@ -29,8 +26,9 @@ class Factory:
             .store_slice(asset.to_slice())\
             .end_cell()
     
+    @staticmethod
     async def get_vault_address(asset: Asset, provider: Provider) -> Address:
-        stack = await provider.runGetMethod(address=self.address,
+        stack = await provider.runGetMethod(address=MAINNET_FACTORY_ADDR,
                                             method="get_vault_address",
                                             stack=[[
                                                 "tvm.Slice",
@@ -38,16 +36,19 @@ class Factory:
                                             ]])
         return stack[0]["value"].read_msg_addr()
     
+    @staticmethod
     async def get_native_vault(provider: Provider) -> VaultNative:
-        native_vault_address = await self.get_vault_address(Asset.native(), provider)
+        native_vault_address = await Factory.get_vault_address(Asset.native(), provider)
 
         return VaultNative.create_from_address(native_vault_address)
 
-    async def get_jetton_vault(provider: Provider, jetton_root: jettonRoot) -> VaultJetton:
-        jetton_vault_address = await self.get_vault_address(Asset.jetton(jetton_root), provider)
+    @staticmethod
+    async def get_jetton_vault(jetton_root: JettonRoot, provider: Provider) -> VaultJetton:
+        jetton_vault_address = await Factory.get_vault_address(Asset.jetton(jetton_root), provider)
 
         return VaultJetton.create_from_address(jetton_vault_address)
     
+    @staticmethod
     def create_create_volatile_pool_payload(
         assets: [Asset, Asset],
         query_id: int = 0
@@ -59,17 +60,18 @@ class Factory:
             .store_slice(assets[0].to_slice())\
             .end_cell()
     
+    @staticmethod
     async def get_pool_address(
         pool_type: PoolType,
         assets: [Asset, Asset],
         provider: Provider
     ) -> Address:
-        stack = await provider.runGetMethod(address=self.address,
+        stack = await provider.runGetMethod(address=MAINNET_FACTORY_ADDR,
                                             method="get_pool_address",
                                             stack=[
                                                 [
                                                     "int",
-                                                    str(PoolType.value)
+                                                    str(pool_type.value)
                                                 ],
                                                 [
                                                     "tvm.Slice",
@@ -82,21 +84,23 @@ class Factory:
                                             ])
         return stack[0]["value"].read_msg_addr()
 
+    @staticmethod
     async def get_pool(
         pool_type: PoolType,
         assets: [Asset, Asset],
         provider: Provider
     ) -> Pool:
-        pool_address = await self.get_pool_address(pool_type, assets, provider)
+        pool_address = await Factory.get_pool_address(pool_type, assets, provider)
 
         return Pool.create_from_address(pool_address)
-    
+
+    @staticmethod
     async def get_liquidity_deposit_address(
         owner_address: Address,
         pool_type: PoolType,
         assets: [Asset, Asset]
     ) -> Address:
-        stack = await provider.runGetMethod(address=self.address,
+        stack = await provider.runGetMethod(address=MAINNET_FACTORY_ADDR,
                                             method="get_liquidity_deposit_address",
                                             stack=[
                                                 [
@@ -117,11 +121,12 @@ class Factory:
                                                 ]
                                             ])
     
+    @staticmethod
     async def get_liquidity_deposit(
         owner_address: Address,
         pool_type: PoolType,
         assets: [Asset, Asset]
     ) -> LiquidityDeposit:
-        liquidity_deposit_address = await self.get_liquidity_deposit_address(owner_address, pool_type, assets)
+        liquidity_deposit_address = await Factory.get_liquidity_deposit_address(owner_address, pool_type, assets)
 
         return LiquidityDeposit.create_from_address(liquidity_deposit_address)

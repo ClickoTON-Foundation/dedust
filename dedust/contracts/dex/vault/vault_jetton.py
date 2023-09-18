@@ -51,7 +51,7 @@ class VaultJetton:
             .store_address(pool_address)\
             .store_uint(0, 1)\
             .store_coins(limit)\
-            .store_maybe_ref(_next if Vault.pack_swap_step(pool_address, limit, _next) else None)\
-            .store_ref(Vault.pack_swap_params(swapParams) if swapParams else {})\
+            .store_maybe_ref(begin_cell().end_cell())\
+            .store_ref(Vault.pack_swap_params(swapParams))\
             .end_cell()
             

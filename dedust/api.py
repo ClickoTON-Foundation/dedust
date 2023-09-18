@@ -33,15 +33,21 @@ class Provider:
             elif s[0] == "null":
                 stack.append({"type": "null"})
             elif s[0] == "cell":
-                stack.append({"type": "cell", "value": Cell.one_from_boc(b64decode(s[1]["bytes"]))})
+                stack.append({"type": "cell", "value": Cell.one_from_boc(b64decode(s[1]["bytes"])).begin_parse()})
             elif s[0] == "slice":
-                stack.append({"type": "slice", "value": Cell.one_from_boc(b64decode(s[1]["bytes"]))})
+                stack.append({"type": "slice", "value": Cell.one_from_boc(b64decode(s[1]["bytes"])).begin_parse()})
             elif s[0] == "builder":
                 stack.append({"type": "builder", "value": Cell.one_from_boc(b64decode([1]["bytes"]))})
         return stack
 
-    async def getState(address):
+    async def getState(self, address):
         r = await self._request("GET",
                                 f"{self.toncenter_url}/getAddressInformation",
                                 params={"address": address.to_string(1, 1, 1) if type(address) == Address else address})
         return r["result"]["account_state"]
+
+    async def sendBoc(self, boc):
+        r = await self._request("POST",
+                                f"{self.toncenter_url}/sendBoc",
+                                json={"boc": boc})
+        return r

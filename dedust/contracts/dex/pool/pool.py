@@ -8,6 +8,7 @@ from ....api import Provider
 
 class Pool:
     def __init__(
+        self,
         address: Union[Address, str]
     ):
         self.address = Address(address) if type(address) == str else address
@@ -16,12 +17,12 @@ class Pool:
     def create_from_address(address: Union[Address, str]) -> Type["Pool"]:
         return Pool(address)
     
-    async def get_pool_type(provider: Provider) -> PoolType:
+    async def get_pool_type(self, provider: Provider) -> PoolType:
         stack = await provider.runGetMethod(address=self.address,
                                             method="is_stable")
         return stack[0]["value"]
     
-    async def get_assets(provider: Provider) -> [Asset, Asset]:
+    async def get_assets(self, provider: Provider) -> [Asset, Asset]:
         stack = await provider.runGetMethod(address=self.address,
                                             method="get_assets")
         return [
@@ -30,6 +31,7 @@ class Pool:
         ]
     
     async def get_estimated_swap_out(
+        self,
         asset_in: Asset,
         amount_in: int,
         provider: Provider
@@ -53,6 +55,7 @@ class Pool:
         }
     
     async def get_estimate_deposit_out(
+        self,
         amounts: [int, int],
         provider: Provider
     ) -> list:
@@ -74,12 +77,12 @@ class Pool:
             "fair_supply": stack[2]["value"]
         }
     
-    async def get_reserves(provider: Provider) -> list:
+    async def get_reserves(self, provider: Provider) -> list:
         stack = await provider.runGetMethod(address=self.address,
                                             method="get_reserves")
         return [stack[0]["value"], stack[1]["value"]]
     
-    async def get_trade_fee(provider: Provider) -> int:
+    async def get_trade_fee(self, provider: Provider) -> int:
         stack = await provider.runGetMethod(address=self.address,
                                             method="get_trade_fee")
 
@@ -88,7 +91,7 @@ class Pool:
 
         return numerator / denominator
 
-    async def get_wallet_address(owner_address: Address, provider: Provider) -> Address:
+    async def get_wallet_address(self, owner_address: Address, provider: Provider) -> Address:
         stack = await provider.runGetMethod(address=self.address,
                                             method="get_wallet_address",
                                             stack=[[
@@ -97,5 +100,5 @@ class Pool:
                                             ]])
         return stack[0].read_msg_addr()
 
-    async def get_wallet(owner_address: Address, provider: Provider) -> JettonWallet:
+    async def get_wallet(self, owner_address: Address, provider: Provider) -> JettonWallet:
         return JettonWallet.create_from_address(await self.get_wallet_address(owner_address, provider))
