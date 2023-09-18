@@ -1,7 +1,7 @@
 from tonsdk.utils import Address
 from tonsdk.boc import begin_cell, Cell
 from typing import Union, Type
-from .Vault import Vault, SwapParams, SwapStep
+from .vault import Vault, SwapParams, SwapStep
 from ..common.readiness_status import ReadinessStatus
 from ..common.asset import Asset
 from ..pool import PoolType
@@ -45,6 +45,14 @@ class VaultJetton:
     def create_swap_payload(
         pool_address: Address,
         limit: int = 0,
-        swapParams: swapParams,
-
-    )
+        swapParams: SwapParams = None,
+        _next: SwapStep = None
+    ) -> Cell:
+        return begin_cell()\
+            .store_uint(self.SWAP, 32)\
+            .store_address(pool_address)\
+            .store_uint(0, 1)\
+            .store_coins(limit)\
+            .store_maybe_ref(_next if Vault.pack_swap_step(pool_address, limit, _next) else None)\
+            .store_ref(Vault.pack_swap_params(swapParams) if swapParams else {})\
+            .end_cell()

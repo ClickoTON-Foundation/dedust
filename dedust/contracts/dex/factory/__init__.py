@@ -1,1 +1,1 @@
-from .Factory import *
+from .factory import *
