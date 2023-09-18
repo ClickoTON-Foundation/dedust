@@ -20,7 +20,7 @@ class VaultNative:
     
     @staticmethod
     def create_deposit_liquidity_payload(
-        poolType: PoolType,
+        pool_type: PoolType,
         assets: [Asset, Asset],
         target_balances: [int, int],
         amount: int,
@@ -33,7 +33,7 @@ class VaultNative:
             .store_uint(0xd55e4686)\
             .store_uint(query_id, 64)\
             .store_coins(amount)\
-            .store_uint(poolType.value, 1)\
+            .store_uint(pool_type.value, 1)\
             .store_slice(assets[0].to_slice())\
             .store_slice(assets[1].to_slice())\
             .store_ref(
@@ -53,7 +53,7 @@ class VaultNative:
         pool_address: Address,
         limit: int = 0,
         query_id: int = 0,
-        swapParams: SwapParams = None,
+        swap_params: SwapParams = None,
         _next: SwapStep = None
     ) -> Cell:
         return begin_cell()\
@@ -64,5 +64,5 @@ class VaultNative:
             .store_uint(0, 1)\
             .store_coins(limit)\
             .store_maybe_ref(begin_cell().end_cell())\
-            .store_ref(Vault.pack_swap_params(swapParams) if swapParams else begin_cell().end_cell())\
+            .store_ref(Vault.pack_swap_params(swap_params) if swap_params else begin_cell().end_cell())\
             .end_cell()
