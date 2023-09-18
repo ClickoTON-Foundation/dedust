@@ -4,7 +4,7 @@ import time
 from tonsdk.utils import Address, bytes_to_b64str
 from tonsdk.contract.wallet import Wallets, WalletVersionEnum
 
-mnemonics = ["your", "mnemonics", "words"]
+mnemonics = ["your", "mnemonics", "here"]
 
 mnemonics, pub_k, priv_k, wallet = Wallets.from_mnemonics(mnemonics=mnemonics, version=WalletVersionEnum.v4r2,
                                                           workchain=0)

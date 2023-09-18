@@ -63,6 +63,6 @@ class VaultNative:
             .store_address(pool_address)\
             .store_uint(0, 1)\
             .store_coins(limit)\
-            .store_maybe_ref(begin_cell().end_cell())\
-            .store_ref(Vault.pack_swap_params(swap_params) if swap_params else begin_cell().end_cell())\
+            .store_maybe_ref(None)\
+            .store_ref(Vault.pack_swap_params(swap_params))\
             .end_cell()
