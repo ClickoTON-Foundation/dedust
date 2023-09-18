@@ -5,6 +5,17 @@ from ..common.asset import Asset
 from ....api import Provider
 
 
+class SwapStep:
+    def __init__(
+        self,
+        pool_address: Address,
+        limit: int = 0,
+        next: Union[SwapStep, None] = None
+    ):
+        self.pool_address = pool_address
+        self.limit = limit
+        self.next = next
+        
 class SwapParams:
     def __init__(
         self,

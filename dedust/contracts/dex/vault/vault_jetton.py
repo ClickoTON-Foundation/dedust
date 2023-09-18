@@ -1,7 +1,7 @@
 from tonsdk.utils import Address
 from tonsdk.boc import begin_cell, Cell
 from typing import Union, Type
-from .Vault import Vault, swapParams
+from .Vault import Vault, SwapParams, SwapStep
 from ..common.readiness_status import ReadinessStatus
 from ..common.asset import Asset
 from ..pool import PoolType
@@ -24,27 +24,27 @@ class VaultJetton:
     def create_deposit_liquidity_payload(
         poolType: PoolType,
         assets: [Asset, Asset],
-        targetBalances: [int, int],
-        minimalLpAmount: int = 0,
-        fulfillPayload: Union[Cell, None] = None,
-        rejectPayload: Union[Cell, None] = None
+        target_balances: [int, int],
+        minimal_lp_amount: int = 0,
+        fulfill_payload: Union[Cell, None] = None,
+        reject_payload: Union[Cell, None] = None
     ) -> Cell:
         return begin_cell()\
             .store_uint(self.DEPOSIT_LIQUIDITY)\
             .store_uint(poolType.value, 1)\
-            .store_slice(assets[0].toSlice())\
-            .store_slice(assets[1].toSlice())\
-            .store_coins(minimalLpAmount)\
-            .store_coins(targetBalances[0])\
-            .store_coins(targetBalances[1])\
-            .store_maybe_ref(fulfillPayload)\
-            .store_maybe_ref(rejectPayload)\
+            .store_slice(assets[0].to_slice())\
+            .store_slice(assets[1].to_slice())\
+            .store_coins(minimal_lp_amount)\
+            .store_coins(target_balances[0])\
+            .store_coins(target_balances[1])\
+            .store_maybe_ref(fulfill_payload)\
+            .store_maybe_ref(reject_payload)\
             .end_cell()
 
     @staticmethod
     def create_swap_payload(
-        poolAddress: Address,
+        pool_address: Address,
         limit: int = 0,
         swapParams: swapParams,
-        
+
     )
