@@ -17,10 +17,10 @@ class JettonRoot:
     async def get_wallet_address(owner_address: Address, provider: Provider) -> Address:
         stack = await provider.runGetMethod(address=self.address,
                                             method="get_wallet_address",
-                                            stack=[
+                                            stack=[[
                                                 "tvm.Slice",
                                                 bytes_to_b64str(begin_cell().store_address(owner_address).end_cell().to_boc())
-                                            ])
+                                            ]])
 
         return stack.read_msg_addr()
     
@@ -31,9 +31,9 @@ class JettonRoot:
         stack = await provider.runGetMethod(address=self.address,
                                             method="get_jetton_data")
         return {
-            "total_supply": stack[0],
-            "is_mintable": stack[1] != 0,
-            "admin_address": stack[2].read_msg_addr(),
-            "content": stack[3],
-            "wallet_code": stack[4]
+            "total_supply": stack[0]["value"],
+            "is_mintable": stack[1]["value"] != 0,
+            "admin_address": stack[2]["value"].read_msg_addr(),
+            "content": stack[3]["value"],
+            "wallet_code": stack[4]["value"]
         }

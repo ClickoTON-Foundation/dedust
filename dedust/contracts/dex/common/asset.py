@@ -8,7 +8,7 @@ class Asset:
     def __init__(
         self,
         _type: AssetType,
-        address: Union[Address, str, None] = None
+        address: Union[Address, str]
     ):
         self._type = _type
         self.address = Address(address) if type(address) == str else address
@@ -18,9 +18,10 @@ class Asset:
         return Asset(AssetType.NATIVE)
     
     @staticmethod
-    def jetton(minter: Address) -> Type["Asset"]:
+    def jetton(minter: Union[Address, str]) -> Type["Asset"]:
         return Asset(AssetType.JETTON, minter)
 
+    @staticmethod
     def from_slice(self, src: Slice) -> Type["Asset"]:
         _type = src.read_uint(4)
         if _type == AssetType.NATIVE.value:
