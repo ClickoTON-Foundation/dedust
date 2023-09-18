@@ -1,6 +1,8 @@
 import aiohttp
 from tonsdk.utils import Address
 from tonsdk.boc import Cell, Slice
+from base64 import b64decode
+
 
 class Provider:
     def __init__(
@@ -14,7 +16,7 @@ class Provider:
         r = await self.session.request(method, url, **kwargs)
         return (await r.json())
 
-    async def runGetMethod(address, method, stack = []):
+    async def runGetMethod(self, address, method, stack = []):
         payload = {
             "address": address.to_string(1, 1, 1) if type(address) == Address else address,
             "method": method,
@@ -27,16 +29,15 @@ class Provider:
         stack = []
         for s in r["result"]["stack"]:
             if s[0] == "num":
-                stack.append({"type": "int", "value": int(r[1], 16)})
+                stack.append({"type": "int", "value": int(s[1], 16)})
             elif s[0] == "null":
                 stack.append({"type": "null"})
             elif s[0] == "cell":
-                stack.append({"type": "cell", "value": Cell.one_from_boc(s[1]["bytes"])})
+                stack.append({"type": "cell", "value": Cell.one_from_boc(b64decode(s[1]["bytes"]))})
             elif s[0] == "slice":
-                stack.append({"type": "slice", "value": Cell.one_from_boc(s[1]["bytes"])})
+                stack.append({"type": "slice", "value": Cell.one_from_boc(b64decode(s[1]["bytes"]))})
             elif s[0] == "builder":
-                stack.append({"type": "builder", "value": Cell.one_from_boc(s[1]["bytes"])})
-
+                stack.append({"type": "builder", "value": Cell.one_from_boc(b64decode([1]["bytes"]))})
         return stack
 
     async def getState(address):

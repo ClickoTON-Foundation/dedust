@@ -20,7 +20,7 @@ swap = dedust.VaultNative.create_swap_payload(
 
 boc = bytes_to_b64str(swap.to_boc(False))
 
-amount_with_commission = round(amount + 0.25 * nanotons_in_ton)
+amount_with_commission = int(amount + 0.25 * nanotons_in_ton)
 link = f'https://app.tonkeeper.com/transfer/EQDa4VOnTYlLvDJ0gZjNYm5PXfSmmtL6Vs6A_CZEtXCNICq_?amount={amount_with_commission}&bin={boc}'
 
 print(f'Use these link: {link}')
