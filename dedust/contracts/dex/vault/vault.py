@@ -19,17 +19,17 @@ class SwapStep:
 class SwapParams:
     def __init__(
         self,
-        deadline: int = 0,
+        deadline = 0,
         recipient_address: Union[Address, None] = None,
         referral_address: Union[Address, None] = None,
         fulfill_payload: Union[Cell, None] = None,
         reject_payload: Union[Cell, None] = None
     ):
-        self.deadline: int = 0,
-        self.recipient_address: Union[Address, None] = None,
-        self.referral_address: Union[Address, None] = None,
-        self.fulfill_payload: Union[Cell, None] = None,
-        self.reject_payload: Union[Cell, None] = None
+        self.deadline = deadline
+        self.recipient_address = recipient_address
+        self.referral_address = referral_address
+        self.fulfill_payload = fulfill_payload
+        self.reject_payload = reject_payload
 
 class Vault:
     def __init__(
@@ -39,17 +39,17 @@ class Vault:
     
     async def get_asset(self, provider: Provider) -> Asset:
         stack = await provider.runGetMethod(address=self.address,
-                                             method="get_asset")
+                                            method="get_asset")
         return Asset.from_slice(stack[0]["value"].begin_parse())
 
     @staticmethod
     def pack_swap_params(swapParams: SwapParams) -> Cell:
         return begin_cell()\
             .store_uint(swapParams.deadline, 32)\
-            .store_address(swapParams.recipientAddress)\
-            .store_address(swapParams.referralAddress)\
-            .store_maybe_ref(swapParams.fulfillPayload)\
-            .store_maybe_ref(swapParams.rejectPayload)\
+            .store_address(swapParams.recipient_address)\
+            .store_address(swapParams.referral_address)\
+            .store_maybe_ref(swapParams.fulfill_payload)\
+            .store_maybe_ref(swapParams.reject_payload)\
             .end_cell()
 
     @staticmethod
