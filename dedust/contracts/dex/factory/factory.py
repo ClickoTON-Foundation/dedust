@@ -4,9 +4,9 @@ from typing import Union, Type
 from ..common.asset import Asset
 from ..vault import VaultNative, VaultJetton
 from ..liquidity_deposit import LiquidityDeposit
+from ..pool import Pool, PoolType
 from ...jettons import JettonRoot
 from ....api import Provider
-from ..pool import Pool, PoolType
 
 
 class Factory:
