@@ -5,6 +5,7 @@ from .pool_type import PoolType
 from ..common.asset import Asset
 from ...jettons import JettonWallet
 from ....api import Provider
+from ..common.readiness_status import ReadinessStatus
 
 class Pool:
     def __init__(
@@ -17,6 +18,14 @@ class Pool:
     def create_from_address(address: Union[Address, str]) -> Type["Pool"]:
         return Pool(address)
     
+    async def get_readiness_status(provider: Provider) -> ReadinessStatus:
+        state = await provider.getState(self.address)
+        if state != "active":
+            return ReadinessStatus.NOT_DEPLOYED
+        
+        reserves = await self.get_reserves(provider)
+        return ReadinessStatus.READY if reserves[0] > 0 and reserves[1] > 0 else ReadinessStatus.NOT_READY
+
     async def get_pool_type(self, provider: Provider) -> PoolType:
         stack = await provider.runGetMethod(address=self.address,
                                             method="is_stable")

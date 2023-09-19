@@ -4,6 +4,7 @@ from typing import Union, Type
 from .vault import Vault, SwapParams, SwapStep
 from ..common.readiness_status import ReadinessStatus
 from ..common.asset import Asset
+from ..common.readiness_status import ReadinessStatus
 from ..pool import PoolType
 from ....api import Provider
 
@@ -18,6 +19,16 @@ class VaultJetton:
     def create_from_address(address: Union[Address, str]) -> Type["VaultJetton"]:
         return VaultJetton(address)
     
+    async def get_readiness_status(provider: Provider) -> ReadinessStatus:
+        state = await provider.getState(self.address)
+        if state != "active":
+            return ReadinessStatus.NOT_DEPLOYED
+
+        stack = await provider.runGetMethod(address=self.address,
+                                            method="is_ready")
+
+        return ReadinessStatus.READY if bool(stack[0]["value"]) else ReadinessStatus.NOT_READY
+
     @staticmethod
     def create_deposit_liquidity_payload(
         poolType: PoolType,

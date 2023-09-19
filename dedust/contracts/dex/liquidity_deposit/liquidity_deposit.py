@@ -1,9 +1,10 @@
 from tonsdk.utils import Address
 from tonsdk.boc import Cell, begin_cell
 from typing import Union, Type
-from ....api import Provider
 from ..pool import PoolType
 from ..common import Asset
+from ..common.readiness_status import ReadinessStatus
+from ....api import Provider
 
 
 class LiquidityDeposit:
@@ -15,7 +16,14 @@ class LiquidityDeposit:
     @staticmethod
     def create_from_address(address: Union[Address, str]) -> Type["LiquidityDeposit"]:
         return LiquidityDeposit(address)
-    
+
+    async def get_readiness_status(provider: Provider) -> ReadinessStatus:
+        state = await provider.getState(self.address)
+        if state != "active":
+            return ReadinessStatus.NOT_DEPLOYED
+  
+        return ReadinessStatus.READY
+
     async def get_owner_address(self, provider: Provider) -> Address:
         stack = await provider.runGetMethod(address=self.address,
                                             method="get_owner_addr")
