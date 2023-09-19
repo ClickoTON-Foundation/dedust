@@ -49,9 +49,9 @@ class Pool:
                                                 ]
                                             ])
         return {
-            "asset_out": Asset.from_slice(stack[0]["result"]),
-            "amount_out": stack[1]["result"],
-            "trade_fee": stack[2]["result"]
+            "asset_out": Asset.from_slice(stack[0]["value"]),
+            "amount_out": stack[1]["value"],
+            "trade_fee": stack[2]["value"]
         }
     
     async def get_estimate_deposit_out(
@@ -102,4 +102,3 @@ class Pool:
 
     async def get_wallet(self, owner_address: Address, provider: Provider) -> JettonWallet:
         return JettonWallet.create_from_address(await self.get_wallet_address(owner_address, provider))
-        

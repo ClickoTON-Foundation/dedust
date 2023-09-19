@@ -22,7 +22,7 @@ class Asset:
         return Asset(AssetType.JETTON, minter)
 
     @staticmethod
-    def from_slice(self, src: Slice) -> Type["Asset"]:
+    def from_slice(src: Slice) -> Type["Asset"]:
         _type = src.read_uint(4)
         if _type == AssetType.NATIVE.value:
             return Asset.native()

@@ -1,6 +1,5 @@
 from dedust import Asset, Factory, PoolType, Provider, SwapStep, JettonRoot, VaultJetton
 import asyncio
-import time
 from tonsdk.utils import Address, bytes_to_b64str
 from tonsdk.contract.wallet import Wallets, WalletVersionEnum
 
