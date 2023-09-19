@@ -14,9 +14,9 @@ async def main():
                                   assets=[TON, SCALE],
                                   provider=provider)
                                     
-    price = await pool.get_estimated_swap_out(asset_in=TON,
-                                              amount_in=int(10*1e9),
-                                              provider=provider)
-    print(f"10 TON = {price['amount_out'] / 1e9} SCALE")
+    price = (await pool.get_estimated_swap_out(asset_in=TON,
+                                               amount_in=int(10*1e9),
+                                               provider=provider))["amount_out"]
+    print(f"10 TON = {price / 1e9} SCALE")
 
 asyncio.run(main())
