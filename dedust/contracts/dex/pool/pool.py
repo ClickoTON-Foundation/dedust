@@ -26,8 +26,8 @@ class Pool:
         stack = await provider.runGetMethod(address=self.address,
                                             method="get_assets")
         return [
-            Asset.from_slice(stack[0]["value"].begin_parse()),
-            Asset.from_slice(stack[1]["value"].begin_parse())
+            Asset.from_slice(stack[0]["value"]),
+            Asset.from_slice(stack[1]["value"])
         ]
     
     async def get_estimated_swap_out(
