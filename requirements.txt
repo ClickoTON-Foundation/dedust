@@ -1,0 +1,2 @@
+tonsdk>=1.0.13
+aiohttp>=3.8.5
