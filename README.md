@@ -103,8 +103,7 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 
 If you like the library, I will be glad to accept donations.
 
-* TON: EQAsl59qOy9C2XL5452lGbHU9bI3l4lhRaopeNZ82NRK8nlA
-       EQCgphx8rTI0PukwmgpVqiPgqguTujhQscg2h7jgc4U0t347
+* TON: EQCgphx8rTI0PukwmgpVqiPgqguTujhQscg2h7jgc4U0t347
 
 ## Acknowledgments
 
