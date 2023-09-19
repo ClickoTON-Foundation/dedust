@@ -1,2 +1,2 @@
-from .jetton_wallet import *
-from .jetton_root import *
+from .jetton_root import JettonRoot
+from .jetton_wallet import JettonWallet

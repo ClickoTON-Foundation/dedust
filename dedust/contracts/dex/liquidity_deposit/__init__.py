@@ -1,1 +1,1 @@
-from .liquidity_deposit import *
+from .liquidity_deposit import LiquidityDeposit
