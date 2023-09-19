@@ -62,10 +62,13 @@ class Vault:
                 .end_cell()
 
     @staticmethod
-    def pack_swap_step(pool_address: Address, limit: int = 0, _next: SwapStep = None) -> Cell:
+    def pack_swap_step(_next: SwapStep = None) -> Cell:
+        if _next is None:
+            return None
+
         return begin_cell()\
-            .store_address(pool_address)\
+            .store_address(_next.pool_address)\
             .store_uint(0, 1)\
-            .store_coins(limit)\
-            .store_maybe_ref(None)\
+            .store_coins(_next.limit)\
+            .store_maybe_ref(Vault.pack_swap_step(_next.pool_address) if _next._next else None)\
             .end_cell()

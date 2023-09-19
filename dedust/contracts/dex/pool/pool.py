@@ -98,7 +98,8 @@ class Pool:
                                                 "tvm.Slice",
                                                 bytes_to_b64str(begin_cell().store_address(owner_address).end_cell().to_boc())
                                             ]])
-        return stack[0].read_msg_addr()
+        return stack[0]["value"].read_msg_addr()
 
     async def get_wallet(self, owner_address: Address, provider: Provider) -> JettonWallet:
         return JettonWallet.create_from_address(await self.get_wallet_address(owner_address, provider))
+        

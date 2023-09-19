@@ -28,10 +28,10 @@ class VaultJetton:
         reject_payload: Union[Cell, None] = None
     ) -> Cell:
         return begin_cell()\
-            .store_uint(0x40e108d6)\
+            .store_uint(0x40e108d6, 32)\
             .store_uint(poolType.value, 1)\
-            .store_slice(assets[0].to_slice())\
-            .store_slice(assets[1].to_slice())\
+            .store_cell(assets[0].to_slice())\
+            .store_cell(assets[1].to_slice())\
             .store_coins(minimal_lp_amount)\
             .store_coins(target_balances[0])\
             .store_coins(target_balances[1])\
@@ -43,15 +43,15 @@ class VaultJetton:
     def create_swap_payload(
         pool_address: Address,
         limit: int = 0,
-        swapParams: SwapParams = None,
-        _next: SwapStep = None
+        _next: Address = None,
+        swap_params: SwapParams = None
     ) -> Cell:
         return begin_cell()\
             .store_uint(0xe3a0d482, 32)\
             .store_address(pool_address)\
             .store_uint(0, 1)\
             .store_coins(limit)\
-            .store_maybe_ref(begin_cell().end_cell())\
-            .store_ref(Vault.pack_swap_params(swapParams))\
+            .store_maybe_ref(Vault.pack_swap_step(_next))\
+            .store_ref(Vault.pack_swap_params(swap_params))\
             .end_cell()
             

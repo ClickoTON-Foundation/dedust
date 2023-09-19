@@ -38,6 +38,7 @@ class JettonWallet:
             .end_cell()
     
     def create_burn_payload(
+        self,
         amount: int,
         query_id: int = 0,
         response_address: Union[Address, None] = None,
@@ -51,7 +52,7 @@ class JettonWallet:
             .store_maybe_ref(custom_payload)\
             .end_cell()
     
-    async def get_wallet_data(provider: Provider) -> list:
+    async def get_wallet_data(self, provider: Provider) -> list:
         stack = await provider.runGetMethod(address=self.address,
                                             method="get_wallet_data")
         return [stack[0]["value"], # balance
@@ -59,6 +60,6 @@ class JettonWallet:
                 stack[2]["value"].read_msg_addr(), # minter_address
                 stack[3]["value"]] # wallet_code
     
-    async def get_balance(provider: Provider):
-        balance = await self.get_wallet_data()[0]
+    async def get_balance(self, provider: Provider):
+        balance = (await self.get_wallet_data(provider))[0]
         return balance

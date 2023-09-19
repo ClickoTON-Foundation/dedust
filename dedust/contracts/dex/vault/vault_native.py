@@ -30,18 +30,18 @@ class VaultNative:
         reject_payload: Union[Cell, None] = None
     ) -> Cell:
         return begin_cell()\
-            .store_uint(0xd55e4686)\
+            .store_uint(0xd55e4686, 32)\
             .store_uint(query_id, 64)\
             .store_coins(amount)\
             .store_uint(pool_type.value, 1)\
-            .store_slice(assets[0].to_slice())\
-            .store_slice(assets[1].to_slice())\
+            .store_cell(assets[0].to_slice())\
+            .store_cell(assets[1].to_slice())\
             .store_ref(
                 begin_cell()\
                 .store_coins(minimal_lp_amount)\
                 .store_coins(target_balances[0])\
                 .store_coins(target_balances[1])\
-                .end_cell()
+                .end_cell()\
             )\
             .store_maybe_ref(fulfill_payload)\
             .store_maybe_ref(reject_payload)\

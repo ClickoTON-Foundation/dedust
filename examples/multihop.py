@@ -1,4 +1,4 @@
-from dedust import Asset, Factory, PoolType, Provider, JettonRoot, VaultJetton
+from dedust import Asset, Factory, PoolType, Provider, SwapStep, JettonRoot, VaultJetton
 import asyncio
 import time
 from tonsdk.utils import Address, bytes_to_b64str
@@ -15,12 +15,15 @@ async def main():
     recipient_address = wallet.address
 
     SCALE_ADDRESS = Address("EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE")
+    BOLT_ADDRESS = Address("EQD0vdSA_NedR9uvbgN9EikRX-suesDxGeFg69XQMavfLqIw")
 
-    TON = Asset.native()
     SCALE = Asset.jetton(SCALE_ADDRESS)
+    TON = Asset.native()
+    BOLT = Asset.jetton(BOLT_ADDRESS)
 
-    pool = await Factory.get_pool(PoolType.VOLATILE, [TON, SCALE], provider)
- 
+    TON_SCALE = await Factory.get_pool(PoolType.VOLATILE, [TON, SCALE], provider)
+    TON_BOLT = await Factory.get_pool(PoolType.VOLATILE, [TON, BOLT], provider)
+
     scale_vault = await Factory.get_jetton_vault(SCALE_ADDRESS, provider)
     scale_root = JettonRoot.create_from_address(SCALE_ADDRESS)
     scale_wallet = await scale_root.get_wallet(recipient_address, provider)
@@ -31,7 +34,8 @@ async def main():
         amount=swap_amount,
         response_address=recipient_address,
         forward_amount=int(0.25*1e9),
-        forward_payload=VaultJetton.create_swap_payload(pool_address=pool.address)
+        forward_payload=VaultJetton.create_swap_payload(pool_address=TON_SCALE.address,
+                                                        _next=SwapStep(pool_address=TON_BOLT.address))
     )
 
     seqno = await provider.runGetMethod(address=recipient_address, method="seqno")
