@@ -80,6 +80,8 @@ asyncio.run(main())
 
 ## Version History
 
+* 1.0.1
+    * Small fix
 * 1.0.0
     * Remake to DeDust SDK analogue
 * 0.0.5

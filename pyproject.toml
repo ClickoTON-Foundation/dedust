@@ -2,7 +2,7 @@
 name = "dedust"
 description = "DeDust - DeDust SDK for Python."
 readme = "README.md"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
     {name = "Shibdev"},
     {name = "Dalvpv"}
