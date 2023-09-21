@@ -1,7 +1,9 @@
-import aiohttp
+from httpx import AsyncClient
 from tonsdk.utils import Address
 from tonsdk.boc import Cell, Slice
 from base64 import b64decode
+import logging
+import warnings
 
 
 class Provider:
@@ -10,11 +12,26 @@ class Provider:
     ):
         self.toncenter_url = toncenter_url
         self.headers = {"X-API-Key": toncenter_api_key} if toncenter_api_key != None else None
-        self.session = aiohttp.ClientSession(headers=self.headers)
+        self.client = AsyncClient(headers=self.headers)
 
-    async def _request(self, method, url, **kwargs):
-        r = await self.session.request(method, url, **kwargs)
-        return (await r.json())
+    async def request(self, request_method: str, method: str, **kwargs):
+        try:
+            request = await self.client.request(
+                method = request_method,
+                url = self.toncenter_url + "/" + method.replace("/", ""),
+                **kwargs
+            )
+            try:
+                res = request.json()
+            except BaseException:
+                return {"error": "Invalid response", "context": request.text}
+            
+            if res.get("error"):
+                raise Exception(res["error"])
+            
+            return res
+        except BaseException as e:
+            return {"error": f"{e}"}
 
     async def runGetMethod(self, address, method, stack = []):
         payload = {
@@ -23,8 +40,8 @@ class Provider:
             "stack": stack
         }
 
-        r = await self._request("POST",
-                                f"{self.toncenter_url}/runGetMethod",
+        r = await self.request("POST",
+                                "runGetMethod",
                                 json=payload)
         stack = []
         for s in r["result"]["stack"]:
@@ -37,17 +54,19 @@ class Provider:
             elif s[0] == "slice":
                 stack.append({"type": "slice", "value": Cell.one_from_boc(b64decode(s[1]["bytes"])).begin_parse()})
             elif s[0] == "builder":
-                stack.append({"type": "builder", "value": Cell.one_from_boc(b64decode([1]["bytes"]))})
+                stack.append({"type": "builder", "value": Cell.one_from_boc(b64decode(s[1]["bytes"]))})
         return stack
 
     async def getState(self, address):
-        r = await self._request("GET",
-                                f"{self.toncenter_url}/getAddressInformation",
+        r = await self.request("GET",
+                                "getAddressInformation",
                                 params={"address": address.to_string(1, 1, 1) if type(address) == Address else address})
         return r["result"]["account_state"]
 
     async def sendBoc(self, boc):
-        r = await self._request("POST",
-                                f"{self.toncenter_url}/sendBoc",
+        r = await self.request("POST",
+                                "sendBoc",
                                 json={"boc": boc})
         return r
+
+warnings.filterwarnings("ignore", category=UserWarning, module="httpx._client") # Way to delete httpx warning
