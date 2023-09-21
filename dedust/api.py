@@ -2,7 +2,6 @@ from httpx import AsyncClient
 from tonsdk.utils import Address
 from tonsdk.boc import Cell, Slice
 from base64 import b64decode
-import logging
 import warnings
 
 
@@ -69,4 +68,4 @@ class Provider:
                                 json={"boc": boc})
         return r
 
-warnings.filterwarnings("ignore", category=UserWarning, module="httpx._client") # Way to delete httpx warning
+warnings.filterwarnings("ignore", category=UserWarning, module="httpx._client") # Way to ignore httpx warning
