@@ -18,7 +18,7 @@ class Pool:
     def create_from_address(address: Union[Address, str]) -> Type["Pool"]:
         return Pool(address)
     
-    async def get_readiness_status(provider: Provider) -> ReadinessStatus:
+    async def get_readiness_status(self, provider: Provider) -> ReadinessStatus:
         state = await provider.getState(self.address)
         if state != "active":
             return ReadinessStatus.NOT_DEPLOYED

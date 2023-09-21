@@ -19,7 +19,7 @@ class VaultNative:
     def create_from_address(address: Union[Address, str]) -> Type["VaultJetton"]:
         return VaultNative(address)
     
-    async def get_readiness_status(provider: Provider) -> ReadinessStatus:
+    async def get_readiness_status(self, provider: Provider) -> ReadinessStatus:
         state = await provider.getState(self.address)
         if state != "active":
             return ReadinessStatus.NOT_DEPLOYED

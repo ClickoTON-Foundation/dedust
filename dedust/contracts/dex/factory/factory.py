@@ -98,7 +98,8 @@ class Factory:
     async def get_liquidity_deposit_address(
         owner_address: Address,
         pool_type: PoolType,
-        assets: [Asset, Asset]
+        assets: [Asset, Asset],
+        provider: Provider
     ) -> Address:
         stack = await provider.runGetMethod(address=MAINNET_FACTORY_ADDR,
                                             method="get_liquidity_deposit_address",
@@ -106,10 +107,10 @@ class Factory:
                                                 [
                                                     "tvm.Slice",
                                                     bytes_to_b64str(begin_cell().store_address(owner_address).end_cell().to_boc())
-                                                ]
+                                                ],
                                                 [
                                                     "int",
-                                                    str(PoolType.value)
+                                                    str(pool_type.value)
                                                 ],
                                                 [
                                                     "tvm.Slice",
@@ -120,6 +121,7 @@ class Factory:
                                                     bytes_to_b64str(assets[1].to_slice().to_boc())
                                                 ]
                                             ])
+        return stack[0]["value"].read_msg_addr()
     
     @staticmethod
     async def get_liquidity_deposit(

@@ -17,7 +17,7 @@ class LiquidityDeposit:
     def create_from_address(address: Union[Address, str]) -> Type["LiquidityDeposit"]:
         return LiquidityDeposit(address)
 
-    async def get_readiness_status(provider: Provider) -> ReadinessStatus:
+    async def get_readiness_status(self, provider: Provider) -> ReadinessStatus:
         state = await provider.getState(self.address)
         if state != "active":
             return ReadinessStatus.NOT_DEPLOYED
@@ -68,7 +68,7 @@ class LiquidityDeposit:
                                             method="get_min_lp_amount")
         return stack[0]["value"]
     
-    async def create_cancel_deposit_payload(
+    def create_cancel_deposit_payload(
         self,
         query_id: int = 0,
         payload: Union[Cell, None] = None
