@@ -10,7 +10,7 @@ You can swap tokens, deposit liquidity and many more.
 
 ### Dependencies
 
-* aiohttp
+* httpx
 * tonsdk
 
 ### Installing
