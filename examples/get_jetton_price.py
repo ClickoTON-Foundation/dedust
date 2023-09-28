@@ -4,7 +4,7 @@ import asyncio
 from tonsdk.utils import Address
 
 async def main():
-    provider = Provider(toncenter_api_key="6b0862cc1f56a87e70a73923d420a5e43de57faf567dca61de6c2b733452bcb5")
+    provider = Provider()
 
     SCALE_ADDRESS = Address("EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE")
 

@@ -7,7 +7,7 @@ import warnings
 
 class Provider:
     def __init__(
-        self, toncenter_url = "https://toncenter.com/api/v2", toncenter_api_key=None
+        self, toncenter_url = "https://mainnet.tonhub.com", toncenter_api_key=None
     ):
         self.toncenter_url = toncenter_url
         self.headers = {"X-API-Key": toncenter_api_key} if toncenter_api_key != None else None
