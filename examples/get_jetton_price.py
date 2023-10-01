@@ -1,4 +1,5 @@
-from dedust import Asset, Factory, PoolType, Provider
+from dedust import Asset, Factory, PoolType
+from dedust.api import Provider
 import asyncio
 from tonsdk.utils import Address
 

@@ -1,4 +1,5 @@
-from dedust import Asset, Factory, PoolType, Provider, JettonRoot, JettonWallet, VaultJetton
+from dedust import Asset, Factory, PoolType, JettonRoot, JettonWallet, VaultJetton
+from dedust.api import Provider
 import asyncio
 from tonsdk.utils import Address, bytes_to_b64str
 from tonsdk.contract.wallet import Wallets, WalletVersionEnum
@@ -9,7 +10,7 @@ mnemonics, pub_k, priv_k, wallet = Wallets.from_mnemonics(mnemonics=mnemonics, v
                                                           workchain=0)
 
 async def main():
-    provider = Provider(toncenter_api_key="6b0862cc1f56a87e70a73923d420a5e43de57faf567dca61de6c2b733452bcb5")
+    provider = Provider()
 
     recipient_address = wallet.address
 

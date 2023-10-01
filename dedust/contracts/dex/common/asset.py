@@ -34,7 +34,7 @@ class Asset:
             return AssetError("Asset is not supported.")
     
     def equals(self, other: Type["Asset"]) -> bool:
-        return self.toString() == other.toString()
+        return self.to_string() == other.to_string()
     
     def write_to(self, builder: Builder) -> Builder:
         if self._type == AssetType.NATIVE:

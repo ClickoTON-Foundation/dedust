@@ -1,4 +1,5 @@
-from dedust import Asset, Factory, PoolType, Provider, SwapParams, VaultNative
+from dedust import Asset, Factory, PoolType, SwapParams, VaultNative
+from dedust.api import Provider
 import asyncio
 import time
 from tonsdk.utils import Address, bytes_to_b64str

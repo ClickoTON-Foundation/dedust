@@ -72,3 +72,4 @@ class Vault:
             .store_coins(_next.limit)\
             .store_maybe_ref(Vault.pack_swap_step(_next.pool_address) if _next._next else None)\
             .end_cell()
+            
