@@ -42,6 +42,7 @@ class Provider:
         r = await self.request("POST",
                                 "runGetMethod",
                                 json=payload)
+        print(r)
         stack = []
         for s in r["result"]["stack"]:
             if s[0] == "num":
