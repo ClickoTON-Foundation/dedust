@@ -28,7 +28,7 @@ class Asset:
             return Asset.native()
 
         elif _type == AssetType.JETTON.value:
-            return Asset(AssetType.JETTON, src.read_msg_addr())
+            return Asset(AssetType.JETTON, f"{src.read_uint(8)}:{src.read_bytes(32).hex()}")
 
         else:
             return AssetError("Asset is not supported.")
