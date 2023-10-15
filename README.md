@@ -80,6 +80,8 @@ asyncio.run(main())
 
 ## Version History
 
+* 1.0.4
+    * Bug fix
 * 1.0.3
     * Fixes
 * 1.0.2
