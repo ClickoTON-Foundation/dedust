@@ -1,8 +1,6 @@
-from tonsdk.utils import Address
-from tonsdk.boc import begin_cell, Cell
+from pytoniq import begin_cell, Cell, Address, LiteBalancer
 from typing import Union, Type
 from ..common.asset import Asset
-from ....api import Provider
 
 
 class SwapStep:
@@ -20,10 +18,10 @@ class SwapParams:
     def __init__(
         self,
         deadline = 0,
-        recipient_address: Union[Address, None] = None,
-        referral_address: Union[Address, None] = None,
-        fulfill_payload: Union[Cell, None] = None,
-        reject_payload: Union[Cell, None] = None
+        recipient_address: Union[Address, str, None] = None,
+        referral_address: Union[Address, str, None] = None,
+        fulfill_payload: Union[Address, str, None] = None,
+        reject_payload: Union[Address, str, None] = None
     ):
         self.deadline = deadline
         self.recipient_address = recipient_address
@@ -37,10 +35,11 @@ class Vault:
     ):
         self.address = Address(address) if type(address) == str else address
     
-    async def get_asset(self, provider: Provider) -> Asset:
-        stack = await provider.runGetMethod(address=self.address,
-                                            method="get_asset")
-        return Asset.from_slice(stack[0]["value"].begin_parse())
+    async def get_asset(self, provider: LiteBalancer) -> Asset:
+        stack = await provider.run_get_method(address=self.address,
+                                              method="get_asset",
+                                              stack=[])
+        return Asset.from_slice(stack[0].begin_parse())
 
     @staticmethod
     def pack_swap_params(swap_params: Union[SwapParams, None]) -> Cell:

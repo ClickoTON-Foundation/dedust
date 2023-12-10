@@ -1,31 +1,27 @@
 from dedust import Asset, Factory, PoolType, JettonRoot, JettonWallet, VaultJetton
-from dedust.api import Provider
 import asyncio
-from tonsdk.utils import Address, bytes_to_b64str
-from tonsdk.contract.wallet import Wallets, WalletVersionEnum
+from pytoniq import WalletV4R2, LiteBalancer
 
 mnemonics = ["your", "mnemonics", "here"]
 
-mnemonics, pub_k, priv_k, wallet = Wallets.from_mnemonics(mnemonics=mnemonics, version=WalletVersionEnum.v4r2,
-                                                          workchain=0)
-
 async def main():
-    provider = Provider()
+    provider = LiteBalancer.from_mainnet_config(1)
+    await provider.start_up()
 
-    recipient_address = wallet.address
+    wallet = await WalletV4R2.from_mnemonic(provider=provider, mnemonics=mnemonics)
 
-    SCALE_ADDRESS = Address("EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE")
+    SCALE_ADDRESS = "EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE"
 
     SCALE = Asset.jetton(SCALE_ADDRESS)
     TON = Asset.native()
 
     assets = [TON, SCALE]
     target_balances = [int(float(input("Ton amount: ")) * 1e9),
-                       int(float(input("Scale amount: "))*1e9)]
+                       int(float(input("Scale amount: ")) * 1e9)]
 
     scale_vault = await Factory.get_jetton_vault(SCALE_ADDRESS, provider)
     scale_root = JettonRoot.create_from_address(SCALE_ADDRESS)
-    scale_wallet = await scale_root.get_wallet(recipient_address, provider)
+    scale_wallet = await scale_root.get_wallet(wallet.address, provider)
 
     ton_vault = await Factory.get_native_vault(provider)
     
@@ -35,37 +31,28 @@ async def main():
                                                              target_balances=target_balances,
                                                              amount=target_balances[0])
 
-    seqno = await provider.runGetMethod(address=recipient_address, method="seqno")
-    query = wallet.create_transfer_message(to_addr=ton_vault.address,
-                                           amount=target_balances[0] + (0.15*1e9),
-                                           seqno=seqno[0]["value"],
-                                           payload=ton_payload)
-    boc = bytes_to_b64str(query["message"].to_boc(False))
-    await provider.sendBoc(boc)
+    await wallet.transfer(destination=ton_vault.address,
+                          amount=int(target_balances[0] + (0.15*1e9)),
+                          body=ton_payload)
 
-    await asyncio.sleep(3) # waiting
+    await asyncio.sleep(15) # waiting
 
     scale_root = JettonRoot.create_from_address(SCALE_ADDRESS)
-    scale_wallet = await scale_root.get_wallet(recipient_address, provider)
+    scale_wallet = await scale_root.get_wallet(wallet.address, provider)
 
     # Deposit SCALE to vault
     scale_payload = scale_wallet.create_transfer_payload(
         destination=scale_vault.address,
         amount=target_balances[1],
-        response_address=recipient_address,
+        response_address=wallet.address,
         forward_amount=int(0.4*1e9),
         forward_payload=VaultJetton.create_deposit_liquidity_payload(poolType=PoolType.VOLATILE,
                                                                      assets=assets,
                                                                      target_balances=target_balances)
     )
 
-    seqno = await provider.runGetMethod(address=recipient_address, method="seqno")
-    query = wallet.create_transfer_message(to_addr=scale_wallet.address,
-                                           amount=int(0.5*1e9),
-                                           seqno=seqno[0]["value"],
-                                           payload=scale_payload)
-
-    boc = bytes_to_b64str(query["message"].to_boc(False))
-    await provider.sendBoc(boc)
+    await wallet.transfer(destination=scale_wallet.address,
+                          amount=int(0.5*1e9),
+                          body=scale_payload)
 
 asyncio.run(main())

@@ -1,12 +1,12 @@
 from dedust import Asset, Factory, PoolType
-from dedust.api import Provider
+from pytoniq import LiteBalancer
 import asyncio
-from tonsdk.utils import Address
 
 async def main():
-    provider = Provider()
+    provider = LiteBalancer.from_mainnet_config(1)
+    await provider.start_up()
 
-    SCALE_ADDRESS = Address("EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE")
+    SCALE_ADDRESS = "EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE"
 
     TON = Asset.native()
     SCALE = Asset.jetton(SCALE_ADDRESS)

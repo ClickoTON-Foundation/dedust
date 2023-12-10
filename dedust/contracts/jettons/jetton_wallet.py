@@ -1,8 +1,5 @@
-from tonsdk.utils import Address
-from tonsdk.boc import begin_cell, Cell
-from tonsdk.contract.token.ft import JettonWallet
+from pytoniq import begin_cell, Cell, Address, LiteBalancer
 from typing import Union, Type
-from ...api import Provider
 
 
 class JettonWallet:
@@ -18,7 +15,7 @@ class JettonWallet:
 
     def create_transfer_payload(
         self,
-        destination: Address,
+        destination: Union[Address, str],
         amount: int,
         query_id: int = 0,
         response_address: Union[Address, None] = None,
@@ -52,14 +49,15 @@ class JettonWallet:
             .store_maybe_ref(custom_payload)\
             .end_cell()
     
-    async def get_wallet_data(self, provider: Provider) -> list:
-        stack = await provider.runGetMethod(address=self.address,
-                                            method="get_wallet_data")
-        return [stack[0]["value"], # balance
-                stack[1]["value"].read_msg_addr(), #owner_address
-                stack[2]["value"].read_msg_addr(), # minter_address
-                stack[3]["value"]] # wallet_code
+    async def get_wallet_data(self, provider: LiteBalancer) -> list:
+        stack = await provider.run_get_method(address=self.address,
+                                              method="get_wallet_data",
+                                              stack=[])
+        return [stack[0],
+                stack[1].load_address(),
+                stack[2].load_address(),
+                stack[3]]
     
-    async def get_balance(self, provider: Provider):
+    async def get_balance(self, provider: LiteBalancer):
         balance = (await self.get_wallet_data(provider))[0]
         return balance

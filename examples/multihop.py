@@ -1,21 +1,17 @@
 from dedust import Asset, Factory, PoolType, SwapStep, JettonRoot, VaultJetton
-from dedust.api import Provider
 import asyncio
-from tonsdk.utils import Address, bytes_to_b64str
-from tonsdk.contract.wallet import Wallets, WalletVersionEnum
+from pytoniq import WalletV4R2, LiteBalancer
 
 mnemonics = ["your", "mnemonics", "here"]
 
-mnemonics, pub_k, priv_k, wallet = Wallets.from_mnemonics(mnemonics=mnemonics, version=WalletVersionEnum.v4r2,
-                                                          workchain=0)
-
 async def main():
-    provider = Provider()
+    provider = LiteBalancer.from_mainnet_config(1)
+    await provider.start_up()
 
-    recipient_address = wallet.address
+    wallet = await WalletV4R2.from_mnemonic(provider=provider, mnemonics=mnemonics)
 
-    SCALE_ADDRESS = Address("EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE")
-    BOLT_ADDRESS = Address("EQD0vdSA_NedR9uvbgN9EikRX-suesDxGeFg69XQMavfLqIw")
+    SCALE_ADDRESS = "EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE"
+    BOLT_ADDRESS = "EQD0vdSA_NedR9uvbgN9EikRX-suesDxGeFg69XQMavfLqIw"
 
     SCALE = Asset.jetton(SCALE_ADDRESS)
     TON = Asset.native()
@@ -26,25 +22,20 @@ async def main():
 
     scale_vault = await Factory.get_jetton_vault(SCALE_ADDRESS, provider)
     scale_root = JettonRoot.create_from_address(SCALE_ADDRESS)
-    scale_wallet = await scale_root.get_wallet(recipient_address, provider)
+    scale_wallet = await scale_root.get_wallet(wallet.address, provider)
 
     swap_amount = int(float(input("Enter swap amount(SCALE): ")) * 1e9)
     swap = scale_wallet.create_transfer_payload(
         destination=scale_vault.address,
         amount=swap_amount,
-        response_address=recipient_address,
+        response_address=wallet.address,
         forward_amount=int(0.25*1e9),
         forward_payload=VaultJetton.create_swap_payload(pool_address=TON_SCALE.address,
                                                         _next=SwapStep(pool_address=TON_BOLT.address))
     )
 
-    seqno = await provider.runGetMethod(address=recipient_address, method="seqno")
-    query = wallet.create_transfer_message(to_addr=scale_wallet.address,
-                                           amount=int(0.3*1e9),
-                                           seqno=seqno[0]["value"],
-                                           payload=swap)
-
-    boc = bytes_to_b64str(query["message"].to_boc(False))
-    await provider.sendBoc(boc)
+    await wallet.transfer(destination=scale_wallet.address,
+                          amount=int(0.3*1e9),
+                          body=swap)
 
 asyncio.run(main())
