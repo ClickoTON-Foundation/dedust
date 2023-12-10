@@ -11,7 +11,7 @@ You can swap tokens, deposit liquidity and many more.
 ### Dependencies
 
 * httpx
-* tonsdk
+* pytoniq
 
 ### Installing
 
