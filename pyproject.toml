@@ -2,13 +2,12 @@
 name = "dedust"
 description = "DeDust - DeDust SDK for Python."
 readme = "README.md"
-version = "1.1.0"
+version = "1.1.1"
 authors = [
     {name = "Shibdev"},
     {name = "Dalvpv"}
 ]
 dependencies = [
-    "httpx==0.19.0",
     "pytoniq>=0.1.19"
 ]
 

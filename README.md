@@ -10,7 +10,6 @@ You can swap tokens, deposit liquidity and many more.
 
 ### Dependencies
 
-* httpx
 * pytoniq
 
 ### Installing
@@ -70,6 +69,8 @@ asyncio.run(main())
 
 ## Version History
 
+* 1.1.1
+    * Removed httpx from dependencies
 * 1.1.0
     * Change tonsdk to pytoniq
 * 1.0.5
