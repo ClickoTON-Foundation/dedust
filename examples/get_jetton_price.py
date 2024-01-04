@@ -20,4 +20,6 @@ async def main():
                                                provider=provider))["amount_out"]
     print(f"10 TON = {price / 1e9} SCALE")
 
+    await provider.close_all()
+
 asyncio.run(main())

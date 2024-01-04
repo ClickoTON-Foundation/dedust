@@ -69,6 +69,8 @@ asyncio.run(main())
 
 ## Version History
 
+* 1.1.2
+    * Update examples, fix bug with VaultNative
 * 1.1.1
     * Removed httpx from dependencies
 * 1.1.0
