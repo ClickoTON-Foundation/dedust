@@ -70,6 +70,8 @@ asyncio.run(main())
 
 ## Version History
 
+* 1.1.1
+    * Fixed `estimate_deposit_out` get method
 * 1.1.0
     * Change tonsdk to pytoniq
 * 1.0.5

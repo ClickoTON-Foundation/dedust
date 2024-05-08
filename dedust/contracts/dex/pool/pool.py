@@ -61,7 +61,7 @@ class Pool:
         provider: LiteBalancer
     ) -> list:
         stack = await provider.run_get_method(address=self.address,
-                                              method="estimate_swap_out",
+                                              method="estimate_deposit_out",
                                               stack=amounts)
 
         return {
