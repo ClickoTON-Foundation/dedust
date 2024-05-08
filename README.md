@@ -10,7 +10,6 @@ You can swap tokens, deposit liquidity and many more.
 
 ### Dependencies
 
-* httpx
 * pytoniq
 
 ### Installing
@@ -70,8 +69,12 @@ asyncio.run(main())
 
 ## Version History
 
-* 1.1.1
+* 1.1.4
     * Fixed `estimate_deposit_out` get method
+* 1.1.2
+    * Update examples, fix bug with VaultNative
+* 1.1.1
+    * Removed httpx from dependencies
 * 1.1.0
     * Change tonsdk to pytoniq
 * 1.0.5

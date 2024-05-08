@@ -69,6 +69,6 @@ class Vault:
             .store_address(_next.pool_address)\
             .store_uint(0, 1)\
             .store_coins(_next.limit)\
-            .store_maybe_ref(Vault.pack_swap_step(_next.pool_address) if _next._next else None)\
+            .store_maybe_ref(Vault.pack_swap_step(_next._next) if _next._next else None)\
             .end_cell()
             

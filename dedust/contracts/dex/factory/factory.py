@@ -52,7 +52,7 @@ class Factory:
             .store_uint(0x97d51f2f, 32)\
             .store_uint(query_id, 64)\
             .store_slice(assets[0].to_slice())\
-            .store_slice(assets[0].to_slice())\
+            .store_slice(assets[1].to_slice())\
             .end_cell()
     
     @staticmethod
