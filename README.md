@@ -1,4 +1,6 @@
 # DeDust SDK for Python
+[![PyPI version](https://img.shields.io/pypi/v/dedust)](https://pypi.org/project/dedust)
+[![Downloads](https://static.pepy.tech/badge/dedust)](https://pypi.org/project/dedust)
 
 Analogue of DeDust SDK for Python.
 
@@ -114,4 +116,3 @@ If you like the library, I will be glad to accept donations.
 
 * [dedust-sdk](https://github.com/dedust-io/sdk)
 * [dedust-docs](https://api.dedust.io)
-
