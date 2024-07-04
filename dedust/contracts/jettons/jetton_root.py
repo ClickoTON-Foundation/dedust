@@ -10,7 +10,7 @@ class JettonRoot:
         self.address = Address(address) if type(address) == str else address
     
     @staticmethod
-    def create_from_address(address: Union[Address, str]) -> Type["JettonWallet"]:
+    def create_from_address(address: Union[Address, str]) -> "JettonRoot":
         return JettonRoot(address)
 
     async def get_wallet_address(self, owner_address: Union[Address, str], provider: LiteBalancer) -> Address:
@@ -23,7 +23,7 @@ class JettonRoot:
     async def get_wallet(self, owner_address: Union[Address, str], provider: LiteBalancer) -> JettonWallet:
         return JettonWallet.create_from_address(await self.get_wallet_address(owner_address, provider))
     
-    async def get_jetton_data(self, provider: LiteBalancer) -> list:
+    async def get_jetton_data(self, provider: LiteBalancer) -> dict:
         stack = await provider.run_get_method(address=self.address,
                                               method="get_jetton_data",
                                               stack=[])
