@@ -13,7 +13,7 @@ class LiquidityDeposit:
         self.address = Address(address) if type(address) == str else address
     
     @staticmethod
-    def create_from_address(address: Union[Address, str]) -> Type["LiquidityDeposit"]:
+    def create_from_address(address: Union[Address, str]) -> "LiquidityDeposit":
         return LiquidityDeposit(address)
 
     async def get_readiness_status(self, provider: LiteBalancer) -> ReadinessStatus:
@@ -41,7 +41,7 @@ class LiquidityDeposit:
                                               method="get_pool_params",
                                               stack=[])
         pool_type = stack[0].load_address()
-        assets: [Asset, Asset] = [
+        assets: list[Asset] = [
             Asset.from_slice(stack[1].begin_parse()),
             Asset.from_slice(stack[2].begin_parse())
         ]

@@ -14,7 +14,7 @@ class VaultNative:
         self.address = Address(address) if type(address) == str else address
     
     @staticmethod
-    def create_from_address(address: Union[Address, str]) -> Type["VaultJetton"]:
+    def create_from_address(address: Union[Address, str]) -> "VaultNative":
         return VaultNative(address)
     
     async def get_readiness_status(self, provider: LiteBalancer) -> ReadinessStatus:

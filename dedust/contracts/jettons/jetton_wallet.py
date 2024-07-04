@@ -10,7 +10,7 @@ class JettonWallet:
         self.address = Address(address) if type(address) == str else address
     
     @staticmethod
-    def create_from_address(address: Union[Address]) -> Type["JettonWallet"]:
+    def create_from_address(address: Union[Address, str]) -> "JettonWallet":
         return JettonWallet(address)
 
     def create_transfer_payload(

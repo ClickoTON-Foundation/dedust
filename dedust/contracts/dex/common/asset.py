@@ -13,15 +13,15 @@ class Asset:
         self.address = Address(address) if type(address) == str else address
 
     @staticmethod
-    def native() -> Type["Asset"]:
+    def native() -> "Asset":
         return Asset(AssetType.NATIVE)
     
     @staticmethod
-    def jetton(minter: Union[Address, str]) -> Type["Asset"]:
+    def jetton(minter: Union[Address, str]) -> "Asset":
         return Asset(AssetType.JETTON, minter)
 
     @staticmethod
-    def from_slice(src: Slice) -> Type["Asset"]:
+    def from_slice(src: Slice) -> "Asset":
         _type = src.load_uint(4)
         if _type == AssetType.NATIVE.value:
             return Asset.native()
@@ -30,9 +30,9 @@ class Asset:
             return Asset(AssetType.JETTON, f"{src.load_uint(8)}:{src.load_bytes(32).hex()}")
 
         else:
-            return AssetError("Asset is not supported.")
+            raise AssetError("Asset is not supported.")
     
-    def equals(self, other: Type["Asset"]) -> bool:
+    def equals(self, other: "Asset") -> bool:
         return self.to_string() == other.to_string()
     
     def write_to(self, builder: Builder) -> Builder:
@@ -45,7 +45,7 @@ class Asset:
             return builder
 
         else:
-            return AssetError("Asset is not supported.")
+            raise AssetError("Asset is not supported.")
     
     def to_slice(self) -> Slice:
         if self._type == AssetType.NATIVE:
@@ -55,7 +55,7 @@ class Asset:
             return begin_cell().store_uint(AssetType.JETTON.value, 4).store_int(self.address.wc, 8).store_bytes(self.address.hash_part).end_cell().begin_parse()
 
         else:
-            return AssetError("Asset is not supported.")
+            raise AssetError("Asset is not supported.")
     
     def to_string(self) -> str:
         if self._type == AssetType.NATIVE:
@@ -65,4 +65,4 @@ class Asset:
             return f"jetton:{self.address.to_str(0, 0, 0)}"
 
         else:
-            return AssetError("Asset is not supported.")
+            raise AssetError("Asset is not supported.")

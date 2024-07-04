@@ -10,7 +10,7 @@ from ....constants import MAINNET_FACTORY_ADDR
 
 class Factory:
     @staticmethod
-    def create_from_address(address: Union[Address, str]) -> Type["Factory"]:
+    def create_from_address(address: Union[Address, str]) -> "Factory":
         return Factory(address)
     
     @staticmethod
@@ -45,7 +45,7 @@ class Factory:
     
     @staticmethod
     def create_create_volatile_pool_payload(
-        assets: [Asset, Asset],
+        assets: list[Asset],
         query_id: int = 0
     ) -> Cell:
         return begin_cell()\
@@ -58,7 +58,7 @@ class Factory:
     @staticmethod
     async def get_pool_address(
         pool_type: PoolType,
-        assets: [Asset, Asset],
+        assets: list[Asset],
         provider: LiteBalancer
     ) -> Address:
         stack = await provider.run_get_method(address=MAINNET_FACTORY_ADDR,
@@ -71,7 +71,7 @@ class Factory:
     @staticmethod
     async def get_pool(
         pool_type: PoolType,
-        assets: [Asset, Asset],
+        assets: list[Asset],
         provider: LiteBalancer
     ) -> Pool:
         pool_address = await Factory.get_pool_address(pool_type, assets, provider)
@@ -82,7 +82,7 @@ class Factory:
     async def get_liquidity_deposit_address(
         owner_address: Address,
         pool_type: PoolType,
-        assets: [Asset, Asset],
+        assets: list[Asset],
         provider: LiteBalancer
     ) -> Address:
         stack = await provider.run_get_method(address=MAINNET_FACTORY_ADDR,
@@ -99,7 +99,7 @@ class Factory:
     async def get_liquidity_deposit(
         owner_address: Address,
         pool_type: PoolType,
-        assets: [Asset, Asset],
+        assets: list[Asset],
         provider: LiteBalancer
     ) -> LiquidityDeposit:
         liquidity_deposit_address = await Factory.get_liquidity_deposit_address(owner_address, pool_type, assets, provider)

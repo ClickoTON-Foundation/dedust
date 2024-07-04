@@ -13,7 +13,7 @@ class Pool:
         self.address = Address(address) if type(address) == str else address
     
     @staticmethod
-    def create_from_address(address: Union[Address, str]) -> Type["Pool"]:
+    def create_from_address(address: Union[Address, str]) -> "Pool":
         return Pool(address)
     
     async def get_readiness_status(self, provider: LiteBalancer) -> ReadinessStatus:
@@ -31,7 +31,7 @@ class Pool:
                                               stack=[])
         return stack[0]
     
-    async def get_assets(self, provider: LiteBalancer) -> [Asset, Asset]:
+    async def get_assets(self, provider: LiteBalancer) -> list[Asset]:
         stack = await provider.run_get_method(address=self.address,
                                               method="get_assets",
                                               stack=[])
@@ -45,7 +45,7 @@ class Pool:
         asset_in: Asset,
         amount_in: int,
         provider: LiteBalancer
-    ) -> list:
+    ) -> dict:
         stack = await provider.run_get_method(address=self.address,
                                               method="estimate_swap_out",
                                               stack=[asset_in.to_slice(), amount_in])
@@ -57,9 +57,9 @@ class Pool:
     
     async def get_estimate_deposit_out(
         self,
-        amounts: [int, int],
+        amounts: list[int],
         provider: LiteBalancer
-    ) -> list:
+    ) -> dict:
         stack = await provider.run_get_method(address=self.address,
                                               method="estimate_deposit_out",
                                               stack=amounts)
