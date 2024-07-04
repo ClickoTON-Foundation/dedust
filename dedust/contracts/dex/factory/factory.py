@@ -38,8 +38,8 @@ class Factory:
         return VaultNative.create_from_address(native_vault_address)
 
     @staticmethod
-    async def get_jetton_vault(jetton_root: JettonRoot, provider: LiteBalancer) -> VaultJetton:
-        jetton_vault_address = await Factory.get_vault_address(Asset.jetton(jetton_root), provider)
+    async def get_jetton_vault(jetton_address: str, provider: LiteBalancer) -> VaultJetton:
+        jetton_vault_address = await Factory.get_vault_address(Asset.jetton(jetton_address), provider)
 
         return VaultJetton.create_from_address(jetton_vault_address)
     
