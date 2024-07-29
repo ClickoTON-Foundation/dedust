@@ -30,7 +30,7 @@ class JettonRoot:
         return {
             "total_supply": stack[0],
             "is_mintable": stack[1] != 0,
-            "admin_address": stack[2].begin_parse().load_address(),
+            "admin_address": stack[2].load_address(),
             "content": stack[3],
             "wallet_code": stack[4]
         }
